@@ -112,7 +112,7 @@ const useSarcasticCalculator = () => {
           setResult(sarcastic);
           setIsAIResponse(true);
         }
-      } else if (random < 0.4) {
+      } else if (random < 0.40) {
         await delay(1000); // simulate delay
         // Use local sarcastic line
         const sarcastic =
