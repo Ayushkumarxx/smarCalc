@@ -7,7 +7,7 @@ const Home: React.FC = () => {
   return (
     <Layouts.home>
       <Components.navbar />
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[calc(50%-50px)] -rotate-4">
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[calc(50%-50px)] -rotate-4 max-md:hidden">
         <div className="text-[150px] leading-35 font-extrabold tracking-widest ">
           {APP_FIRST_NAME_2.toUpperCase()}
         </div>
