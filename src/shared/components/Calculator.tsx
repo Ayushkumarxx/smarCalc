@@ -4,7 +4,7 @@ import useSarcasticCalculator from "../../utils/hooks/useSarcasticCalculator";
 
 const CalcButton = ({ children, onClick, className = "", span = 1 }: any) => {
   const baseClasses = `${
-    span > 1 ? "aspect-[2/1]" : "aspect-square"
+    span > 1 ? "" : "aspect-square"
   } w-full text-theme-dark text-2xl  border-[0.5px] border-theme-gray active:scale-95 transition-transform flex items-center justify-center rounded-none cursor-pointer`;
   const colSpan = span > 1 ? `col-span-${span}` : "";
   return (
