@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
           <div className="text-2xl sm:text-3xl lg:text-4xl">{APP_LAST_NAME}</div>
         </div>
       </section>
-     <section className="flex flex-row items-center gap-6">
+     <section className="flex flex-row  gap-6">
     <div className="hidden md:flex flex-col">
       <div className="text-sm sm:text-base">Email</div>
       <div className="font-bold text-sm sm:text-base break-all">{CREATOR_EMAIL}</div>
