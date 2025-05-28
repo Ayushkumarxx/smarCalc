@@ -1,15 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
+import sarcasticPhrases from "../const/sarcasticConst";
 
-const sarcasticPhrases = [
-  "Wow, you're a genius.",
-  "Math is hard, right?",
-  "42. Always 42.",
-  "Ask Siri instead.",
-  "I'm not your calculator slave.",
-  "Seriously?",
-  "Try again, Einstein.",
-  "That looks wrong, but ok.",
-];
 
 const useSarcasticCalculator = () => {
   const [expression, setExpression] = useState("");

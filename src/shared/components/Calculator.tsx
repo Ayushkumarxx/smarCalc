@@ -73,9 +73,17 @@ const Calculator: React.FC = () => {
             {expression || ""}
           </div>
           {/* Result Display */}
-          <div className="text-3xl sm:text-4xl md:text-5xl font-normal text-theme-dark">
-            {result}
-          </div>
+     <div
+  className={`font-normal text-theme-dark h-[48px] flex justify-end items-center  ${
+    (/^\d+$/.test(result) ||
+     ['+', '-', '*', '/', '%', '.', 'x', '×', '÷', '(', ')', 'error'].includes(result.toLowerCase()))
+      ? 'text-4xl md:text-5xl '
+      : 'text- 2xl'
+  }`}
+>
+  {result}
+</div>
+
         </div>
       </div>
 
