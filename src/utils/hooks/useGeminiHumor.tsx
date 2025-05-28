@@ -75,7 +75,7 @@ User query: "${userQuery}"
       });
 
       const responseText = await result.text;
-      console.log("Generated response:", responseText);
+
 
       if (responseText) {
         const parsedResponse = JSON.parse(responseText);
