@@ -1,3 +1,3 @@
 import useSarcasticCalculator from "./useSarcasticCalculator";
-
-export { useSarcasticCalculator };
+import useGeminiHumor from "./useGeminiHumor";
+export { useSarcasticCalculator, useGeminiHumor };

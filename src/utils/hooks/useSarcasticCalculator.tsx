@@ -1,50 +1,72 @@
 import { useState, useCallback, useMemo } from "react";
 import sarcasticPhrases from "../const/sarcasticConst";
+import useGeminiHumor from "./useGeminiHumor";
 
-
+// Utility for delay
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const useSarcasticCalculator = () => {
   const [expression, setExpression] = useState("");
   const [result, setResult] = useState("0");
   const [isNewCalculation, setIsNewCalculation] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
+  const [isAIResponse, setIsAIResponse] = useState(false);
+  const {
+    fetchSnarkyReply,
+  } = useGeminiHumor();
+  const isOperator = useCallback(
+    (char: string) => ["+", "-", "×", "÷"].includes(char),
+    []
+  );
+  const isUnaryOperator = useCallback(
+    (char: string) => ["+", "-"].includes(char),
+    []
+  );
 
-  const isOperator = useCallback((char: string) => ["+", "-", "×", "÷"].includes(char), []);
-  const isUnaryOperator = useCallback((char: string) => ["+", "-"].includes(char), []);
-
-  const handleNumber = useCallback((num: string) => {
-    if (isNewCalculation) {
-      setExpression(num);
-      setResult(num);
-      setIsNewCalculation(false);
-    } else {
-      const newExpression = expression + num;
-      setExpression(newExpression);
-
-      const parts = newExpression.split(/([+\-×÷])/);
-      setResult(parts[parts.length - 1]);
-    }
-  }, [expression, isNewCalculation]);
-
-  const handleOperator = useCallback((op: string) => {
-    const lastChar = expression.slice(-1);
-
-    if (!expression) {
-      if (isUnaryOperator(op)) {
-        setExpression(op);
-        setResult(op);
+  const handleNumber = useCallback(
+    (num: string) => {
+      if (isNewCalculation) {
+        setExpression(num);
+        setResult(num);
         setIsNewCalculation(false);
+      } else {
+        const newExpression = expression + num;
+        setExpression(newExpression);
+
+        const parts = newExpression.split(/([+\-×÷])/);
+        setResult(parts[parts.length - 1]);
       }
-      return;
-    }
+    },
+    [expression, isNewCalculation]
+  );
 
-    if (isOperator(lastChar)) {
-      setExpression(expression.slice(0, -1) + op);
-    } else {
-      setExpression(expression + op);
-    }
+  const handleOperator = useCallback(
+    (op: string) => {
+      const lastChar = expression.slice(-1);
+      if (!expression) {
+        if (!isAIResponse) {
+          setExpression(result + op);
+          setResult(op);
+          setIsNewCalculation(false);
+        }
+        else if (isUnaryOperator(op)) {
+          setExpression(op);
+          setResult(op);
+          setIsNewCalculation(false);
+        }
+        return;
+      }
 
-    setResult(op);
-    setIsNewCalculation(false);
-  }, [expression, isOperator, isUnaryOperator]);
+      if (isOperator(lastChar)) {
+        setExpression(expression.slice(0, -1) + op);
+      } else {
+        setExpression(expression + op);
+      }
+
+      setResult(op);
+      setIsNewCalculation(false);
+    },
+    [expression, isOperator, isUnaryOperator]
+  );
 
   const handleDecimal = useCallback(() => {
     if (isNewCalculation) {
@@ -66,28 +88,54 @@ const useSarcasticCalculator = () => {
     }
   }, [expression, isNewCalculation, isOperator]);
 
-  const calculate = useCallback(() => {
-    try {
-      if (!expression || isOperator(expression.slice(-1))) return;
+  const calculate = useCallback(async () => {
+    if (!expression || isOperator(expression.slice(-1))) return;
 
+    setShowLoading(true);
+    setIsAIResponse(false);
+     
+
+    try {
       const calcExpression = expression.replace(/×/g, "*").replace(/÷/g, "/");
 
-      const evalResult = eval(calcExpression); // ⚠️ In production, use math.js instead
+      const evalResult = eval(calcExpression); // ⚠️ Replace in production
       const random = Math.random();
 
-      if (random < 0.7) {
-        const sarcastic = sarcasticPhrases[Math.floor(Math.random() * sarcasticPhrases.length)];
+      if (random < 0.20) {
+        // Gemini humor (25%)
+        const aiReply = await fetchSnarkyReply(expression);
+
+        if (aiReply) {
+          setResult(aiReply);
+           setIsAIResponse(true);
+        } else {
+          // fallback to local sarcastic phrase
+          const sarcastic =
+            sarcasticPhrases[
+              Math.floor(Math.random() * sarcasticPhrases.length)
+            ];
+          setResult(sarcastic);
+          setIsAIResponse(true);
+          
+        }
+      } else if (random < 0.45) {
+        await delay(1000); // simulate delay
+        // Use local sarcastic line
+        const sarcastic =
+          sarcasticPhrases[Math.floor(Math.random() * sarcasticPhrases.length)];
         setResult(sarcastic);
+          setIsAIResponse(true);
       } else {
         setResult(evalResult.toString());
+  
       }
-
-      setExpression("");
-      setIsNewCalculation(true);
     } catch {
       setResult("Error? Maybe...");
+       setIsAIResponse(true);
+    } finally {
       setExpression("");
       setIsNewCalculation(true);
+      setShowLoading(false);
     }
   }, [expression, isOperator]);
 
@@ -130,6 +178,7 @@ const useSarcasticCalculator = () => {
   return {
     expression,
     result,
+    showLoading,
     lastNumber,
     handleNumber,
     handleOperator,

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { IoCellular, IoWifi, IoBatteryFull } from "react-icons/io5";
 import useSarcasticCalculator from "../../utils/hooks/useSarcasticCalculator";
+import loadingMessages from "../../utils/const/lodingConst";
 
 const CalcButton = ({ children, onClick, className = "", span = 1 }: any) => {
   const baseClasses = `${
@@ -34,6 +35,7 @@ const Calculator: React.FC = () => {
   const {
     expression,
     result,
+    showLoading,
     handleNumber,
     handleOperator,
     handleDecimal,
@@ -42,15 +44,32 @@ const Calculator: React.FC = () => {
     backspace,
   } = useSarcasticCalculator();
 
+  const [loadingTextIndex, setLoadingTextIndex] = useState(0);
+
+  useEffect(() => {
+    let interval: any;
+    if (showLoading) {
+      interval = setInterval(() => {
+        setLoadingTextIndex(
+          (prevIndex) => (prevIndex + 1) % loadingMessages.length
+        );
+      }, 500); // change every 500ms
+    } else {
+      setLoadingTextIndex(0); // reset on hide
+    }
+
+    return () => clearInterval(interval);
+  }, [showLoading]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ 
-        type: "spring", 
-        stiffness: 300, 
+      transition={{
+        type: "spring",
+        stiffness: 300,
         damping: 30,
-        delay: 0.1 
+        delay: 0.1,
       }}
       className="absolute top-[15%] left-1/2 transform -translate-x-1/2 
   w-[95%] sm:w-[400px] max-w-[95%] 
@@ -58,7 +77,7 @@ const Calculator: React.FC = () => {
   bg-theme-background border-10 border-b-0 border-theme-dark 
   overflow-hidden shadow-2xl"
     >
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
@@ -68,7 +87,7 @@ const Calculator: React.FC = () => {
         <span>9:41</span>
 
         {/* Dynamic Island */}
-        <motion.div 
+        <motion.div
           initial={{ width: 0 }}
           animate={{ width: 80 }}
           transition={{ delay: 0.4, duration: 0.5 }}
@@ -76,7 +95,7 @@ const Calculator: React.FC = () => {
         ></motion.div>
 
         {/* Icons */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -89,7 +108,7 @@ const Calculator: React.FC = () => {
       </motion.div>
 
       {/* App Header */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2 }}
@@ -99,7 +118,7 @@ const Calculator: React.FC = () => {
       </motion.div>
 
       {/* Display Area */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
@@ -112,36 +131,38 @@ const Calculator: React.FC = () => {
           </div>
           {/* Result Display */}
           <motion.div
-            key={result}
+            key={showLoading ? loadingTextIndex : result}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
-            className={`font-normal text-theme-dark h-[48px] flex justify-end items-center  ${
-              /^\d+$/.test(result) ||
-              [
-                "+",
-                "-",
-                "*",
-                "/",
-                "%",
-                ".",
-                "x",
-                "×",
-                "÷",
-                "(",
-                ")",
-                "error",
-              ].includes(result.toLowerCase())
-                ? "text-4xl md:text-5xl "
+            className={`font-normal text-theme-dark h-[48px] flex justify-end items-center ${
+              showLoading
+                ? "text-xl italic text-theme-gray"
+                : /^\d+$/.test(result) ||
+                  [
+                    "+",
+                    "-",
+                    "*",
+                    "/",
+                    "%",
+                    ".",
+                    "x",
+                    "×",
+                    "÷",
+                    "(",
+                    ")",
+                    "error",
+                  ].includes(result.toLowerCase())
+                ? "text-4xl md:text-5xl"
                 : "text-[24px] md:text-[26px]"
             }`}
           >
-            {result}
+            {showLoading ? loadingMessages[loadingTextIndex] : result}
           </motion.div>
         </div>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7, staggerChildren: 0.02 }}
