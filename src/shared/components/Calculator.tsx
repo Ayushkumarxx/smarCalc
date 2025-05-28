@@ -40,7 +40,7 @@ const Calculator: React.FC = () => {
   return (
     <div
       className="absolute top-[15%] left-1/2 transform -translate-x-1/2 
-  w-[90%] sm:w-[400px] max-w-[95%] 
+  w-[95%] sm:w-[400px] max-w-[95%] 
   rounded-t-[40px] sm:rounded-t-[55px] 
   bg-theme-background border-10 border-b-0 border-theme-dark 
   overflow-hidden shadow-2xl"
@@ -74,8 +74,8 @@ const Calculator: React.FC = () => {
           </div>
           {/* Result Display */}
           <div className="text-3xl sm:text-4xl md:text-5xl font-normal text-theme-dark">
-  {result}
-</div>
+            {result}
+          </div>
         </div>
       </div>
 
