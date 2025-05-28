@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { IoCellular, IoWifi, IoBatteryFull } from "react-icons/io5";
 import useSarcasticCalculator from "../../utils/hooks/useSarcasticCalculator";
 
@@ -17,14 +18,18 @@ const CalcButton = ({ children, onClick, className = "", span = 1 }: any) => {
   const colSpan = spanClassMap[span] || "col-span-1";
 
   return (
-    <button
+    <motion.button
       onClick={onClick}
       className={`${baseClasses} ${colSpan} ${className}`}
+      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
     >
       {children}
-    </button>
+    </motion.button>
   );
 };
+
 const Calculator: React.FC = () => {
   const {
     expression,
@@ -38,42 +43,79 @@ const Calculator: React.FC = () => {
   } = useSarcasticCalculator();
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ 
+        type: "spring", 
+        stiffness: 300, 
+        damping: 30,
+        delay: 0.1 
+      }}
       className="absolute top-[15%] left-1/2 transform -translate-x-1/2 
   w-[95%] sm:w-[400px] max-w-[95%] 
   rounded-t-[40px] sm:rounded-t-[55px] 
   bg-theme-background border-10 border-b-0 border-theme-dark 
   overflow-hidden shadow-2xl"
     >
-      <div className="relative flex justify-between items-center px-6 py-3 text-sm font-semibold text-theme-dark">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="relative flex justify-between items-center px-6 py-3 text-sm font-semibold text-theme-dark"
+      >
         {/* Time */}
         <span>9:41</span>
 
         {/* Dynamic Island */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 w-20 h-6 bg-theme-dark rounded-full"></div>
+        <motion.div 
+          initial={{ width: 0 }}
+          animate={{ width: 80 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="absolute left-1/2 transform -translate-x-1/2 h-6 bg-theme-dark rounded-full"
+        ></motion.div>
 
         {/* Icons */}
-        <div className="flex items-center space-x-1 text-[18px] text-theme-dark">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="flex items-center space-x-1 text-[18px] text-theme-dark"
+        >
           <IoCellular />
           <IoWifi />
           <IoBatteryFull />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* App Header */}
-      <div className="px-6 py-4 border-b border-theme-gray/20">
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2 }}
+        className="px-6 py-4 border-b border-theme-gray/20"
+      >
         <h1 className="text-2xl font-normal text-theme-dark">SmartCalc</h1>
-      </div>
+      </motion.div>
 
       {/* Display Area */}
-      <div className="flex-1 px-6 py-6 flex flex-col justify-end">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+        className="flex-1 px-6 py-6 flex flex-col justify-end"
+      >
         <div className="text-right mb-4">
           {/* Expression Display */}
           <div className="text-lg text-theme-gray font-semibold mb-2 h-[24px] break-all">
             {expression || ""}
           </div>
           {/* Result Display */}
-          <div
+          <motion.div
+            key={result}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
             className={`font-normal text-theme-dark h-[48px] flex justify-end items-center  ${
               /^\d+$/.test(result) ||
               [
@@ -95,11 +137,16 @@ const Calculator: React.FC = () => {
             }`}
           >
             {result}
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-4 gap-[0px]">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7, staggerChildren: 0.02 }}
+        className="grid grid-cols-4 gap-[0px]"
+      >
         {/* Row 1 */}
         <CalcButton onClick={clear} className="text-lg">
           AC
@@ -151,8 +198,8 @@ const Calculator: React.FC = () => {
         <CalcButton onClick={calculate} className="bg-theme-yellow font-medium">
           =
         </CalcButton>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
