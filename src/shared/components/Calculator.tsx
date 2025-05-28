@@ -26,7 +26,7 @@ const CalcButton = ({ children, onClick, className = "", span = 1 }: any) => {
   );
 };
 const Calculator: React.FC = () => {
- const {
+  const {
     expression,
     result,
     handleNumber,
@@ -37,13 +37,14 @@ const Calculator: React.FC = () => {
     backspace,
   } = useSarcasticCalculator();
 
-
   return (
-   <div className="absolute top-[15%] left-1/2 transform -translate-x-1/2 
+    <div
+      className="absolute top-[15%] left-1/2 transform -translate-x-1/2 
   w-[90%] sm:w-[400px] max-w-[95%] 
   rounded-t-[40px] sm:rounded-t-[55px] 
   bg-theme-background border-10 border-b-0 border-theme-dark 
-  overflow-hidden shadow-2xl">
+  overflow-hidden shadow-2xl"
+    >
       <div className="relative flex justify-between items-center px-6 py-3 text-sm font-semibold text-theme-dark">
         {/* Time */}
         <span>9:41</span>
@@ -72,7 +73,9 @@ const Calculator: React.FC = () => {
             {expression || ""}
           </div>
           {/* Result Display */}
-          <div className="text-5xl font-normal text-theme-dark">{result}</div>
+          <div className="text-3xl sm:text-4xl md:text-5xl font-normal text-theme-dark">
+  {result}
+</div>
         </div>
       </div>
 
