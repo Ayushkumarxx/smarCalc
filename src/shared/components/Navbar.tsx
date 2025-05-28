@@ -8,7 +8,7 @@ import {
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="max-w-[1450px] mx-auto  flex flex-row lg:items-baseline gap-4 lg:gap-0 text-theme-dark">
+    <nav className="max-w-[1450px] mx-auto  flex flex-row items-baseline gap-4 lg:gap-0 text-theme-dark">
       <section className="flex-2">
         <div className="flex flex-col gap-1">
           <div className="font-extrabold text-2xl sm:text-3xl lg:text-4xl">{APP_FIRST_NAME}</div>
