@@ -10,9 +10,7 @@ const useSarcasticCalculator = () => {
   const [isNewCalculation, setIsNewCalculation] = useState(true);
   const [showLoading, setShowLoading] = useState(false);
   const [isAIResponse, setIsAIResponse] = useState(false);
-  const {
-    fetchSnarkyReply,
-  } = useGeminiHumor();
+  const { fetchSnarkyReply } = useGeminiHumor();
   const isOperator = useCallback(
     (char: string) => ["+", "-", "×", "÷"].includes(char),
     []
@@ -47,8 +45,7 @@ const useSarcasticCalculator = () => {
           setExpression(result + op);
           setResult(op);
           setIsNewCalculation(false);
-        }
-        else if (isUnaryOperator(op)) {
+        } else if (isUnaryOperator(op)) {
           setExpression(op);
           setResult(op);
           setIsNewCalculation(false);
@@ -93,21 +90,19 @@ const useSarcasticCalculator = () => {
 
     setShowLoading(true);
     setIsAIResponse(false);
-     
 
     try {
       const calcExpression = expression.replace(/×/g, "*").replace(/÷/g, "/");
-
       const evalResult = eval(calcExpression); // ⚠️ Replace in production
       const random = Math.random();
 
-      if (random < 0.20) {
-        // Gemini humor (25%)
+      if (random < 0.15) {
+        // Gemini humor (15%)
         const aiReply = await fetchSnarkyReply(expression);
 
         if (aiReply) {
           setResult(aiReply);
-           setIsAIResponse(true);
+          setIsAIResponse(true);
         } else {
           // fallback to local sarcastic phrase
           const sarcastic =
@@ -116,22 +111,21 @@ const useSarcasticCalculator = () => {
             ];
           setResult(sarcastic);
           setIsAIResponse(true);
-          
         }
-      } else if (random < 0.45) {
+      } else if (random < 0.4) {
         await delay(1000); // simulate delay
         // Use local sarcastic line
         const sarcastic =
           sarcasticPhrases[Math.floor(Math.random() * sarcasticPhrases.length)];
         setResult(sarcastic);
-          setIsAIResponse(true);
+        setIsAIResponse(true);
       } else {
+        await delay(500);
         setResult(evalResult.toString());
-  
       }
     } catch {
       setResult("Error? Maybe...");
-       setIsAIResponse(true);
+      setIsAIResponse(true);
     } finally {
       setExpression("");
       setIsNewCalculation(true);
@@ -150,7 +144,6 @@ const useSarcasticCalculator = () => {
       clear();
       return;
     }
-
     const newExpression = expression.slice(0, -1);
     setExpression(newExpression);
 
