@@ -30,7 +30,11 @@ const Calculator: React.FC = () => {
 
 
   return (
-    <div className="absolute top-[15%] left-1/2 transform -translate-x-1/2  w-[400px] rounded-t-[55px] bg-theme-background border-10 border-b-0 border-theme-dark overflow-hidden shadow-2xl">
+   <div className="absolute top-[15%] left-1/2 transform -translate-x-1/2 
+  w-[90%] sm:w-[400px] max-w-[95%] 
+  rounded-t-[40px] sm:rounded-t-[55px] 
+  bg-theme-background border-10 border-b-0 border-theme-dark 
+  overflow-hidden shadow-2xl">
       <div className="relative flex justify-between items-center px-6 py-3 text-sm font-semibold text-theme-dark">
         {/* Time */}
         <span>9:41</span>
