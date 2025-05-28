@@ -91,7 +91,7 @@ const Calculator: React.FC = () => {
                 "error",
               ].includes(result.toLowerCase())
                 ? "text-4xl md:text-5xl "
-                : "text-3xl md:text-[26px]"
+                : "text-[24px] md:text-[26px]"
             }`}
           >
             {result}
