@@ -96,7 +96,7 @@ const useSarcasticCalculator = () => {
       const evalResult = eval(calcExpression); // ⚠️ Replace in production
       const random = Math.random();
 
-      if (random < 0.15) {
+      if (random < 0.10) {
         // Gemini humor (15%)
         const aiReply = await fetchSnarkyReply(expression);
 
